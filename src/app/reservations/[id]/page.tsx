@@ -59,14 +59,16 @@ export default function ReservationPage() {
   }
 
   return (
-    <main className="p-8">
-      <h1 className="text-2xl font-bold mb-3">Reservation {id}</h1>
-      <p className="mb-2">Status: {reservation?.status ?? "loading"}</p>
-      <p className="mb-3">Expires in: {Math.floor(expiresIn / 60)}:{String(expiresIn % 60).padStart(2, "0")}</p>
-      {error && <p className="text-red-600 mb-3">{error}</p>}
-      <div className="flex gap-3">
-        <button onClick={confirm} className="px-3 py-1 bg-green-700 text-white rounded" disabled={reservation?.status !== "PENDING"}>Confirm purchase</button>
-        <button onClick={cancel} className="px-3 py-1 bg-gray-700 text-white rounded" disabled={reservation?.status !== "PENDING"}>Cancel</button>
+    <main className="max-w-3xl mx-auto p-6 md:p-10">
+      <div className="glass-card rounded-2xl p-6">
+        <h1 className="text-2xl font-bold mb-2">Reservation {id}</h1>
+        <p className="mb-1">Status: <span className="accent font-semibold">{reservation?.status ?? "loading"}</span></p>
+        <p className="mb-4 muted">Expires in: {Math.floor(expiresIn / 60)}:{String(expiresIn % 60).padStart(2, "0")}</p>
+        {error && <p className="text-red-700 font-medium mb-4">{error}</p>}
+        <div className="flex gap-3">
+          <button onClick={confirm} className="glass-button px-4 py-2 rounded-lg" disabled={reservation?.status !== "PENDING"}>Confirm purchase</button>
+          <button onClick={cancel} className="glass-button px-4 py-2 rounded-lg" disabled={reservation?.status !== "PENDING"}>Cancel</button>
+        </div>
       </div>
     </main>
   );

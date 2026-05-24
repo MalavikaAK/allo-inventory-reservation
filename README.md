@@ -1,3 +1,5 @@
+Live Demo: http://allo-inventory-reservation-tau.vercel.app/
+
 # Allo Inventory Reservation
 
 Next.js (App Router) take-home implementing race-safe inventory reservations across warehouses.
@@ -77,3 +79,4 @@ npm run db:seed
 - UI is intentionally minimal and functional-first.
 - No authentication/tenant isolation layer added.
 - No webhook-driven payment simulation, only reservation lifecycle API.
+
