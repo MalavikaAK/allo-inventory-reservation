@@ -17,22 +17,16 @@ export async function POST(req: NextRequest) {
   }
 
   const result = await prisma.$transaction(async (tx) => {
-    const updated = await tx.inventory.updateMany({
-      where: {
-        productId: payload.productId,
-        warehouseId: payload.warehouseId,
-        totalUnits: { gte: payload.quantity },
-      },
-      data: { reservedUnits: { increment: payload.quantity } },
-    });
+    const updated = await tx.$executeRaw`
+      UPDATE "Inventory"
+      SET "reservedUnits" = "reservedUnits" + ${payload.quantity}
+      WHERE "productId" = ${payload.productId}
+        AND "warehouseId" = ${payload.warehouseId}
+        AND ("totalUnits" - "reservedUnits") >= ${payload.quantity}
+    `;
 
-    if (updated.count === 0) {
+    if (updated === 0) {
       return { status: 409 as const, body: { message: "Not enough stock" } };
-    }
-
-    const inventory = await tx.inventory.findUnique({ where: { productId_warehouseId: { productId: payload.productId, warehouseId: payload.warehouseId } } });
-    if (!inventory || inventory.reservedUnits > inventory.totalUnits) {
-      throw new Error("Reservation overflow");
     }
 
     const reservation = await tx.reservation.create({
