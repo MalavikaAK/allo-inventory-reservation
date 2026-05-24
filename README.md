@@ -1,4 +1,9 @@
-Live Demo: http://allo-inventory-reservation-tau.vercel.app/
+<p align="center">
+  <a aria-label="Live Demo" href="http://allo-inventory-reservation-tau.vercel.app/"><img src="https://img.shields.io/badge/LIVE%20DEMO-allo--inventory--reservation--tau.vercel.app-0ea5e9?style=for-the-badge&labelColor=0f172a" /></a>
+  <a aria-label="Made with Next.js" href="https://nextjs.org/"><img src="https://img.shields.io/badge/MADE%20WITH-Next.js-000000.svg?style=for-the-badge&logo=next.js&labelColor=000" /></a>
+  <a aria-label="Database" href="https://www.prisma.io/"><img src="https://img.shields.io/badge/ORM-Prisma-2D3748.svg?style=for-the-badge&logo=prisma&labelColor=000" /></a>
+  <a aria-label="Cache" href="https://upstash.com/"><img src="https://img.shields.io/badge/CACHE-Upstash%20Redis-22c55e.svg?style=for-the-badge&labelColor=052e16" /></a>
+</p>
 
 # Allo Inventory Reservation
 
@@ -50,7 +55,7 @@ This guarantees exactly one winner when concurrent requests compete for the last
 ## Expiry mechanism (production)
 Two layers:
 1. Lazy cleanup on product/reservation reads and mutations (`releaseExpiredReservations()`)
-2. Proactive cleanup via Vercel Cron every minute to `GET /api/cron/release-expired`
+2. Proactive cleanup via Vercel Cron daily to `GET /api/cron/release-expired` (Hobby plan compatible)
 
 Cron config is in [vercel.json](D:/GetPlaced/Malavika/allo-inventory-reservation/vercel.json).
 
@@ -79,4 +84,3 @@ npm run db:seed
 - UI is intentionally minimal and functional-first.
 - No authentication/tenant isolation layer added.
 - No webhook-driven payment simulation, only reservation lifecycle API.
-

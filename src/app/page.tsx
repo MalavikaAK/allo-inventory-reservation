@@ -51,12 +51,18 @@ export default function Home() {
             <h1 className="text-3xl font-bold">Allo Inventory</h1>
             <p className="muted">Reserve stock safely during checkout windows.</p>
           </div>
-          <div className="flex gap-2">
-            {themeOptions.map((option) => (
-              <button key={option.value} className="glass-button px-3 py-2 rounded-lg text-sm" onClick={() => setTheme(option.value)}>
-                {option.label}
-              </button>
-            ))}
+          <div>
+            <label className="muted text-sm mr-2" htmlFor="theme-select">Themes</label>
+            <select
+              id="theme-select"
+              className="glass-button px-3 py-2 rounded-lg text-sm"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value as Theme)}
+            >
+              {themeOptions.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
@@ -65,7 +71,7 @@ export default function Home() {
 
       <div className="grid gap-4">
         {firstRows.map(({ p, w }) => (
-          <div key={`${p.id}-${w.warehouseId}`} className="glass-card rounded-xl p-4">
+          <div key={`${p.id}-${w.warehouseId}`} className="glass-card interactive-card rounded-xl p-4">
             <p className="font-semibold text-lg">{p.name} <span className="muted text-sm">({p.sku})</span></p>
             <p className="muted mt-1">{w.warehouseName} ({w.warehouseCode})</p>
             <p className="mt-1">Available: <span className="accent font-semibold">{w.availableUnits}</span></p>
