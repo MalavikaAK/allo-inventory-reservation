@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 type Reservation = {
@@ -14,24 +14,30 @@ export default function ReservationPage() {
   const router = useRouter();
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState<number>(() => Date.now());
 
-  async function loadReservation() {
+  const loadReservation = useCallback(async () => {
     const res = await fetch(`/api/reservations/${id}`, { cache: "no-store" });
     const data = await res.json();
     if (!res.ok) return setError(data.message || "Failed to load reservation");
     setReservation(data.reservation);
-  }
+  }, [id]);
 
   useEffect(() => {
-    loadReservation();
     const t = setInterval(() => setNow(Date.now()), 1000);
-    const poll = setInterval(loadReservation, 5000);
+    const poll = setInterval(() => {
+      loadReservation();
+    }, 5000);
+    const kickoff = setTimeout(() => {
+      loadReservation();
+    }, 0);
+
     return () => {
       clearInterval(t);
       clearInterval(poll);
+      clearTimeout(kickoff);
     };
-  }, [id]);
+  }, [loadReservation]);
 
   const expiresIn = reservation
     ? Math.max(0, Math.floor((new Date(reservation.expiresAt).getTime() - now) / 1000))
